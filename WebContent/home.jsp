@@ -33,29 +33,6 @@
         </div>
     </div>
 
-    <!--<div class="col-12">
-        <div class="card-deck mb-5">
-            <div class="card">
-                <div class="card-block">
-                    <div class="row" style="min-height: 1.rem;">
-                        <div class="col" style="width: 100%;">
-                            <div style="width: 100%;">
-                                <div style="width: 50%;">
-                                    <label>${loggedUser}</label>
-                                </div>
-                                <div class="float-right">
-                                    <form method="post" action="newAccount">
-                                        <input type="submit" class="btn btn-primary" value="Add Account">
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
-
     <div class="col-12">
         <div id="boards-container" class="card-columns">
             <c:forEach items="${accounts}" var="account">

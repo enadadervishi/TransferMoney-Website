@@ -1,6 +1,5 @@
 package com.lucy1098.assignments.website.dao;
 
-import com.lucy1098.assignments.website.exceptions.ModelException;
 import com.lucy1098.assignments.website.models.Table;
 import com.lucy1098.assignments.website.util.ThrowingRunnable;
 

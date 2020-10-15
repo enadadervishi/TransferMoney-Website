@@ -3,6 +3,7 @@ package com.lucy1098.assignments.website.dao;
 import com.lucy1098.assignments.website.models.Model;
 import com.lucy1098.assignments.website.util.ThrowingFunction;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,11 +27,12 @@ public class ModelQueryExecutor {
 
     public void createTable(Class<? extends Model> modelType) throws SQLException {
         try {
-            Model model = modelType.newInstance();
+            Model model = modelType.getConstructor().newInstance();
             String[] descriptors = model.getFieldDescriptors();
 
             createTable(descriptors);
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | 
+        		IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
             throw new RuntimeException(e);
         }
     }

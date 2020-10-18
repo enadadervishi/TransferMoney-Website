@@ -3,7 +3,6 @@ package com.lucy1098.assignments.website.dao;
 import com.lucy1098.assignments.website.models.Model;
 import com.lucy1098.assignments.website.util.ThrowingFunction;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,19 +24,13 @@ public class ModelQueryExecutor {
         this.objectAdapter = new SqlObjectAdapter();
     }
 
-    public void createTable(Class<? extends Model> modelType) throws SQLException {
-        try {
-            Model model = modelType.getConstructor().newInstance();
-            String[] descriptors = model.getFieldDescriptors();
-
-            createTable(descriptors);
-        } catch (InstantiationException | IllegalAccessException | 
-        		IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-            throw new RuntimeException(e);
-        }
+    public void createTable(Model model) throws SQLException {
+        String[] descriptors = model.getFieldDescriptors();
+        createTable(descriptors);
     }
 
     public void createTable(String[] fieldDescriptors) throws SQLException {
+    	// CREATE TABLE IF NOT EXISTS tableName (fieldDescriptor,fieldDescriptor)
         StringBuilder stringBuilder = new StringBuilder()
                 .append("CREATE TABLE IF NOT EXISTS ").append(tableName)
                 .append(" (");
@@ -58,6 +51,7 @@ public class ModelQueryExecutor {
     }
 
     public void dropTable() throws SQLException {
+    	// DROP TABLE IF EXISTS tableName
         String query = new StringBuilder()
                 .append("DROP TABLE IF EXISTS ").append(tableName)
                 .toString();
@@ -68,6 +62,8 @@ public class ModelQueryExecutor {
     }
 
     public <T extends Model> T insert(T model) throws SQLException {
+    	// INSERT INTO tableName (username, password, email) VALUES (?, ?, ?)
+    	// INSERT INTO tableName (username, password, email) VALUES ('test', 'password12', 'test@gmail.com')
         String[] fieldNames = model.getFieldNames();
         Object[] fieldValues = model.getFieldValues();
 
@@ -84,10 +80,7 @@ public class ModelQueryExecutor {
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             putParameterList(statement, 1, fieldValues);
 
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("no rows affected");
-            }
+            statement.executeUpdate();
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -102,6 +95,8 @@ public class ModelQueryExecutor {
     }
 
     public void update(Model model) throws SQLException {
+    	// UPDATE tableName SET username=?, password=?, email=? WHERE id=?
+    	// UPDATE tableName SET username='test', password='password12', email='mail@mail.mail' WHERE id=5
         String[] fieldNames = model.getFieldNames();
         Object[] fieldValues = model.getFieldValues();
 
@@ -114,17 +109,15 @@ public class ModelQueryExecutor {
         String query = stringBuilder.toString();
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            int index = putParameterMap(statement, 1, fieldValues);
+            int index = putParameterList(statement, 1, fieldValues);
             statement.setLong(index, model.getId());
 
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("no rows affected");
-            }
+            statement.executeUpdate();
         }
     }
 
     public void delete(Model model) throws SQLException {
+    	// DELETE FROM tableName WHERE id=?
         String query = new StringBuilder()
                 .append("DELETE FROM ").append(tableName)
                 .append(" WHERE id=?")
@@ -137,39 +130,22 @@ public class ModelQueryExecutor {
         }
     }
 
-    public <T extends Model> List<T> selectAll(ThrowingFunction<ResultSet, T, SQLException> factory) throws SQLException {
-        String query = new StringBuilder()
-                .append("SELECT * FROM ").append(tableName)
-                .toString();
-
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            List<T> results = new ArrayList<>();
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    T model = factory.apply(resultSet);
-                    results.add(model);
-                }
-
-                return results;
-            }
-        }
-    }
-
-    public <T extends Model> List<T> selectAll(String[] whereFields, Object[] whereValues, boolean whereOr,
+    public <T extends Model> List<T> selectAll(String[] whereFields, Object[] whereValues, String whereDelim,
                                                       String additionalSettings,
                                                       ThrowingFunction<ResultSet, T, SQLException> factory)
             throws SQLException {
+    	// SELECT * FROM tableName WHERE username=? AND password=? 
+    	// SELECT * FROM tableName WHERE username=? OR password=? ORDER BY timestamp DESC
         StringBuilder stringBuilder = new StringBuilder()
                 .append("SELECT * FROM ").append(tableName);
         stringBuilder.append(" WHERE ");
-        appendParameterMap(stringBuilder, whereFields, whereOr ? " OR " : " AND ");
+        appendParameterMap(stringBuilder, whereFields, whereDelim);
         stringBuilder.append(" ").append(additionalSettings);
 
         String query = stringBuilder.toString();
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            putParameterMap(statement, 1, whereValues);
+            putParameterList(statement, 1, whereValues);
 
             List<T> results = new ArrayList<>();
 
@@ -183,58 +159,27 @@ public class ModelQueryExecutor {
             }
         }
     }
-
-    public <T extends Model> List<T> selectAll(String[] whereFields, Object[] whereValues,
-                                               ThrowingFunction<ResultSet, T, SQLException> factory) throws SQLException {
-        return selectAll(whereFields, whereValues, false, "", factory);
-    }
+    
+    public <T extends Model> Optional<T> selectFirst(String[] whereFields, Object[] whereValues,
+            ThrowingFunction<ResultSet, T, SQLException> factory) throws SQLException {
+		// SELECT * FROM tableName WHERE username=?, password=?
+		List<T> all = selectAll(whereFields, whereValues, "", "LIMIT 1", factory);
+		if (all.isEmpty()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of(all.get(0));
+	}
 
     public <T extends Model> Optional<T> select(long id, ThrowingFunction<ResultSet, T, SQLException> factory)
             throws SQLException {
-        String query = new StringBuilder()
-                .append("SELECT * FROM ").append(tableName)
-                .append(" WHERE id=?")
-                .toString();
-
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setLong(1, id);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (!resultSet.isBeforeFirst()) {
-                    return Optional.empty();
-                } else {
-                    resultSet.next();
-                    return Optional.of(factory.apply(resultSet));
-                }
-            }
-        }
-    }
-
-    public <T extends Model> Optional<T> selectFirst(String[] whereFields, Object[] whereValues,
-                                                     ThrowingFunction<ResultSet, T, SQLException> factory)
-            throws SQLException {
-        StringBuilder stringBuilder = new StringBuilder()
-                .append("SELECT * FROM ").append(tableName);
-        stringBuilder.append(" WHERE ");
-        appendParameterMap(stringBuilder, whereFields, " AND ");
-
-        String query = stringBuilder.toString();
-
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            putParameterMap(statement, 1, whereValues);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (!resultSet.isBeforeFirst()) {
-                    return Optional.empty();
-                } else {
-                    resultSet.next();
-                    return Optional.of(factory.apply(resultSet));
-                }
-            }
-        }
+    	// SELECT * FROM tableName WHERE id=?
+        return selectFirst(new String[] {"id"}, new Object[] {id}, factory);
     }
 
     private void appendParameterList(StringBuilder stringBuilder, int count) {
+    	// 'testuser', 'testpasswprd'....
+    	// ?, ?, ?, ?
         for (int i = 0; i < count; i++) {
             stringBuilder.append('?');
             if (i < count - 1) {
@@ -244,6 +189,7 @@ public class ModelQueryExecutor {
     }
 
     private void appendParameterList(StringBuilder stringBuilder, String[] data) {
+    	// username, password, email
         for (int i = 0; i < data.length; i++) {
             stringBuilder.append(data[i]);
             if (i < data.length - 1) {
@@ -253,9 +199,13 @@ public class ModelQueryExecutor {
     }
 
     private void appendParameterMap(StringBuilder stringBuilder, String[] keys, String delimiter) {
+    	// key = {username, password, email}
+    	// delimeter = ,
         for (int i = 0; i < keys.length; i++) {
+        	// username=?
             stringBuilder.append(keys[i]).append("=?");
             if (i < keys.length - 1) {
+            	// ,
                 stringBuilder.append(delimiter);
             }
         }
@@ -267,15 +217,6 @@ public class ModelQueryExecutor {
             for (Object param : array) {
                 objectAdapter.putInStatement(statement, paramIndex++, param);
             }
-        }
-
-        return paramIndex;
-    }
-
-    private int putParameterMap(PreparedStatement statement, int startIndex, Object[] values) throws SQLException {
-        int paramIndex = startIndex;
-        for (int i = 0; i < values.length; i++) {
-            objectAdapter.putInStatement(statement, paramIndex++, values[i]);
         }
 
         return paramIndex;

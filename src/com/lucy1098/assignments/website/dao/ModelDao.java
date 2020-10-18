@@ -27,7 +27,7 @@ public abstract class ModelDao<T extends Model> {
     }
 
     public void createTable() throws SQLException {
-        executor.createTable(table.modelClass());
+        executor.createTable(table.modelInstance());
     }
 
     public void dropTable() throws SQLException {
@@ -52,10 +52,6 @@ public abstract class ModelDao<T extends Model> {
 
     public void delete(T model) throws SQLException {
         executor.delete(model);
-    }
-
-    public List<T> selectAll() throws SQLException {
-        return executor.selectAll(selectFactory);
     }
 
     public T selectById(long id) throws SQLException, ModelNotFoundException {

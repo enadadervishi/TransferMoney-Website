@@ -1,12 +1,9 @@
 package com.lucy1098.assignments.website.dao;
 
-import com.lucy1098.assignments.website.models.Table;
 import com.lucy1098.assignments.website.util.ThrowingRunnable;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Database implements AutoCloseable {
@@ -25,15 +22,9 @@ public class Database implements AutoCloseable {
         transfers = new TransferDao(connection);
 
         if (initialized.compareAndSet(false, true)) {
-            TableVersionDao versionDao = new TableVersionDao(connection);
-            versionDao.createTable();
-
-            Map<Table, ModelDao<?>> daos = new HashMap<>();
-            daos.put(Table.USER, users);
-            daos.put(Table.ACCOUNT, accounts);
-            daos.put(Table.TRANSFER, transfers);
-
-            updateTables(versionDao, daos);
+        	users.createTable();
+        	accounts.createTable();
+        	transfers.createTable();
         }
     }
 
@@ -69,17 +60,5 @@ public class Database implements AutoCloseable {
     @Override
     public void close() throws Exception {
         connection.close();
-    }
-
-    private void updateTables(TableVersionDao dao, Map<Table, ModelDao<?>> daos) throws SQLException {
-        for (Map.Entry<Table, ModelDao<?>> entry : daos.entrySet()) {
-            long dbVersion = dao.getVersion(entry.getKey());
-            if (dbVersion != entry.getKey().currentVersion()) {
-                entry.getValue().dropTable();
-                entry.getValue().createTable();
-
-                dao.updateVersion(entry.getKey());
-            }
-        }
     }
 }

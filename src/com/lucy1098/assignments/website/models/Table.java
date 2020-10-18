@@ -1,29 +1,23 @@
 package com.lucy1098.assignments.website.models;
 
 public enum Table {
-    USER("users", 3, User.class),
-    ACCOUNT("accounts", 1, Account.class),
-    TRANSFER("transfers", 2, Transfer.class);
+    USER("users", new User()),
+    ACCOUNT("accounts", new Account()),
+    TRANSFER("transfers", new Transfer());
 
     private final String name;
-    private final long currentVersion;
-    private final Class<? extends Model> modelClass;
+    private final Model modelInstance;
 
-    Table(String name, long currentVersion, Class<? extends Model> modelClass) {
+    Table(String name, Model modelInstance) {
         this.name = name;
-        this.currentVersion = currentVersion;
-        this.modelClass = modelClass;
+        this.modelInstance = modelInstance;
     }
 
     public String tableName() {
         return name;
     }
 
-    public long currentVersion() {
-        return currentVersion;
-    }
-
-    public Class<? extends Model> modelClass() {
-        return modelClass;
+    public Model modelInstance() {
+        return modelInstance;
     }
 }

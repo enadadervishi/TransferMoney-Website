@@ -14,7 +14,8 @@ public class AccountDao extends ModelDao<Account> {
     }
 
     public List<Account> selectByUserId(long userId) throws SQLException {
-        return executor.selectAll(new String[] {"userId"}, new Object[] {userId},
-                " AND ", "", Account::new);
+        return executor.selectAll("userId=?", "",
+                new Object[] {userId},
+                Account::new);
     }
 }

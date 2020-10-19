@@ -15,7 +15,7 @@ public class UserDao extends ModelDao<User> {
     }
 
     public User selectByLogin(String username, String password) throws SQLException, ModelNotFoundException {
-        Optional<User> optional = executor.selectFirst(new String[] {"username", "password"},
+        Optional<User> optional = executor.selectFirst("username=? AND password=?", "",
                 new Object[] {username, password},
                 User::new);
         return optional.orElseThrow(ModelNotFoundException::new);

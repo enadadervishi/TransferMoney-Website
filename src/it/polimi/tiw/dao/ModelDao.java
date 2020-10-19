@@ -54,7 +54,7 @@ public abstract class ModelDao<T extends Model> {
     }
 
     public T selectById(long id) throws SQLException, ModelNotFoundException {
-        Optional<T> optional = executor.select(id, selectFactory);
+        Optional<T> optional = executor.selectFirst("id=?", "", new Object[]{id}, selectFactory);
         return optional.orElseThrow(ModelNotFoundException::new);
     }
 }

@@ -35,6 +35,9 @@ public class AuthManager {
         session.setAttribute(CONNECTED_KEY, null);
     }
 
+    /**
+     * E.g. if it's modified manually the url "?id=2" 
+     */
     public void checkAccountAccess(Account account) throws PermissionException {
         OptionalLong optionalLong = getConnectedUserId();
         if (!optionalLong.isPresent() || account.getUserId() != optionalLong.getAsLong()) {

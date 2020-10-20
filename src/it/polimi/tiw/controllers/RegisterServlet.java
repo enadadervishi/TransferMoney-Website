@@ -48,7 +48,9 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         operations.run(request, response, (database, auth)-> {
             try {
+            	//RegistrationData contains username email password repeatPassword
                 RegistrationData data = RegistrationData.fromRequest(new RequestParams(request));
+                //RegistrationOperation check if the informations are valid
                 RegistrationOperation operation = new RegistrationOperation(database, auth);
 
                 operation.perform(data);

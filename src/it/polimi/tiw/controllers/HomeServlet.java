@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @WebServlet(name = "HomeServlet", urlPatterns = {"/", "/home"})
 public class HomeServlet extends HttpServlet {
 
@@ -32,6 +33,10 @@ public class HomeServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	/**
+    	 * Adds all the accounts which belong to the user
+    	 * OperationFlag => lambda works if someone is logged in
+    	 */
         operations.run(request, response, (database, auth)-> {
             long userId = auth.getConnectedUserId().getAsLong();
             List<Account> accounts = database.getAccounts().selectByUserId(userId);

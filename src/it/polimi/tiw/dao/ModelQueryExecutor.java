@@ -12,6 +12,9 @@ import java.util.Optional;
 import it.polimi.tiw.models.Model;
 import it.polimi.tiw.util.ThrowingFunction;
 
+/**
+ * Class with all the required queries
+ */
 public class ModelQueryExecutor {
 
     private final Connection connection;
@@ -72,7 +75,8 @@ public class ModelQueryExecutor {
         stringBuilder.append(")");
 
         String query = stringBuilder.toString();
-
+        
+        //Return generated key = flag from JDBC to fetch the keys
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             putParameterList(statement, 1, fieldValues);
 
@@ -133,6 +137,8 @@ public class ModelQueryExecutor {
                                                Object[] params,
                                                ThrowingFunction<ResultSet, T, SQLException> factory)
             throws SQLException {
+    	// SELECT * FROM tableName WHERE username=? AND password=? 
+     	// SELECT * FROM tableName WHERE username=? OR password=? ORDER BY timestamp DESC
         String query = new StringBuilder()
                 .append("SELECT * FROM ").append(tableName)
                 .append(" WHERE ").append(where).append(' ')
@@ -159,6 +165,7 @@ public class ModelQueryExecutor {
                                                Object[] params,
                                                ThrowingFunction<ResultSet, T, SQLException> factory)
         throws SQLException {
+    	// SELECT * FROM tableName WHERE username=?, password=?
         List<T> list = selectAll(where, additionalSettings, params, factory);
         if (list.isEmpty()) {
             return Optional.empty();

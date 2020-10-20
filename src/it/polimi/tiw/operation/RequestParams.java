@@ -15,6 +15,7 @@ public class RequestParams {
     }
 
     public String get(String name) throws ParamException {
+    	//escapeJava to delete problems like "\n"
         String value = StringEscapeUtils.escapeJava(request.getParameter(name));
         if (value == null) {
             throw new ParamException(name, "missing");

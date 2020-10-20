@@ -32,6 +32,9 @@ public class DeleteAccountServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	/**
+    	 * If they're logged in the lambda function runs
+    	 */
         operations.run(request, response, (database, auth)-> {
             try {
                 RequestParams params = new RequestParams(request);

@@ -33,6 +33,7 @@ public class NewAccountServlet extends HttpServlet {
             long userId = auth.getConnectedUserId().getAsLong();
 
             Account account = new Account();
+            //My choice
             account.setBalance(50.0);
             account.setUserId(userId);
 

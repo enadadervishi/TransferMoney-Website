@@ -36,6 +36,9 @@ public class DbConnection {
         }
     }
 
+    /**
+     * It's opened a new connection due to db.properties which refers to a specific db 
+     */
     private static void initializeDataSource() throws IOException, ClassNotFoundException {
         Properties properties = new Properties();
         try (InputStream inputStream = DbConnection.class.getClassLoader().getResourceAsStream("db.properties")) {

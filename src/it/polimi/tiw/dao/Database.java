@@ -21,6 +21,7 @@ public class Database implements AutoCloseable {
         accounts = new AccountDao(connection);
         transfers = new TransferDao(connection);
 
+        //Thanks to initialized this clause is entered once
         if (initialized.compareAndSet(false, true)) {
         	users.createTable();
         	accounts.createTable();
@@ -40,6 +41,10 @@ public class Database implements AutoCloseable {
         return transfers;
     }
 
+    /**
+     * The transaction is done after db autoCommit is stopped
+     * If something goes wrong then rollback 
+     */
     public <E extends Exception> void doTransaction(ThrowingRunnable<? extends SQLException, E> runnable)
             throws SQLException, E {
         boolean done = false;

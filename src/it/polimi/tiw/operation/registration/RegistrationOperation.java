@@ -11,6 +11,7 @@ import it.polimi.tiw.models.User;
 
 public class RegistrationOperation {
 
+	//-----
     private static final Pattern EMAIL_REGEX = Pattern.compile("^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$");
 
     private final Database database;

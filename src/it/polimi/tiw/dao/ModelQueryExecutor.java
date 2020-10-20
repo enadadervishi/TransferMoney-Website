@@ -30,7 +30,6 @@ public class ModelQueryExecutor {
     }
 
     public void createTable(String[] fieldDescriptors) throws SQLException {
-    	// CREATE TABLE IF NOT EXISTS tableName (fieldDescriptor,fieldDescriptor)
         StringBuilder stringBuilder = new StringBuilder()
                 .append("CREATE TABLE IF NOT EXISTS ").append(tableName)
                 .append(" (");
@@ -51,7 +50,6 @@ public class ModelQueryExecutor {
     }
 
     public void dropTable() throws SQLException {
-    	// DROP TABLE IF EXISTS tableName
         String query = new StringBuilder()
                 .append("DROP TABLE IF EXISTS ").append(tableName)
                 .toString();
@@ -62,8 +60,6 @@ public class ModelQueryExecutor {
     }
 
     public <T extends Model> T insert(T model) throws SQLException {
-    	// INSERT INTO tableName (username, password, email) VALUES (?, ?, ?)
-    	// INSERT INTO tableName (username, password, email) VALUES ('test', 'password12', 'test@gmail.com')
         String[] fieldNames = model.getFieldNames();
         Object[] fieldValues = model.getFieldValues();
 
@@ -80,7 +76,10 @@ public class ModelQueryExecutor {
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             putParameterList(statement, 1, fieldValues);
 
-            statement.executeUpdate();
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("no rows affected");
+            }
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -95,8 +94,6 @@ public class ModelQueryExecutor {
     }
 
     public void update(Model model) throws SQLException {
-    	// UPDATE tableName SET username=?, password=?, email=? WHERE id=?
-    	// UPDATE tableName SET username='test', password='password12', email='mail@mail.mail' WHERE id=5
         String[] fieldNames = model.getFieldNames();
         Object[] fieldValues = model.getFieldValues();
 
@@ -112,12 +109,14 @@ public class ModelQueryExecutor {
             int index = putParameterList(statement, 1, fieldValues);
             statement.setLong(index, model.getId());
 
-            statement.executeUpdate();
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("no rows affected");
+            }
         }
     }
 
     public void delete(Model model) throws SQLException {
-    	// DELETE FROM tableName WHERE id=?
         String query = new StringBuilder()
                 .append("DELETE FROM ").append(tableName)
                 .append(" WHERE id=?")
@@ -169,8 +168,6 @@ public class ModelQueryExecutor {
     }
 
     private void appendParameterList(StringBuilder stringBuilder, int count) {
-    	// 'testuser', 'testpassword'....
-    	// ?, ?, ?, ?
         for (int i = 0; i < count; i++) {
             stringBuilder.append('?');
             if (i < count - 1) {
@@ -180,7 +177,6 @@ public class ModelQueryExecutor {
     }
 
     private void appendParameterList(StringBuilder stringBuilder, String[] data) {
-    	// username, password, email
         for (int i = 0; i < data.length; i++) {
             stringBuilder.append(data[i]);
             if (i < data.length - 1) {
@@ -190,13 +186,9 @@ public class ModelQueryExecutor {
     }
 
     private void appendParameterMap(StringBuilder stringBuilder, String[] keys, String delimiter) {
-    	// key = {username, password, email}
-    	// delimeter = ,
         for (int i = 0; i < keys.length; i++) {
-        	// username=?
             stringBuilder.append(keys[i]).append("=?");
             if (i < keys.length - 1) {
-            	// ,
                 stringBuilder.append(delimiter);
             }
         }

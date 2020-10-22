@@ -1,0 +1,69 @@
+<div class="row padding" ng-controller="account.ctrl">
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="float-right">
+                    <button type="button" class="btn btn-danger" ng-click="deleteAccount()">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 mb-5">
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>Account ID</td>
+                        <td>{{ accountId }}</td>
+                    </tr>
+                    <tr>
+                        <td>Balance</td>
+                        <td>{{ accountBalance }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-center">Transfer</h5>
+                <form class="form-signin" id="transfer-form">
+                    <div class="form-label-group">
+                        <input type="number" id="destinationUserId" name="destinationUserId" class="form-control autocomplete" placeholder="Recipient User Id" ng-model="transfer.destinationUserId" autofocus required min="1" title="must be a positive number" data-field-name="USER_ID">
+                        <label for="destinationUserId">Recipient User Id</label>
+                    </div>
+                    <div class="form-label-group">
+                        <input type="number" id="destinationAccountId" name="destinationAccountId" class="form-control autocomplete" placeholder="Recipient Account Id" ng-model="transfer.destinationAccountId" required min="1" title="must be a positive number" data-field-name="ACCOUNT_ID">
+                        <label for="destinationAccountId">Recipient Account Id</label>
+                    </div>
+                    <div class="form-label-group">
+                        <input type="number" id="amount" name="amount" class="form-control" placeholder="Amount" ng-model="transfer.amount" required min="1" title="must be a positive number" step="0.01">
+                        <label for="amount">Amount</label>
+                    </div>
+
+                    <div id="transfer-error" class="alert alert-danger rounded mr-2" role="alert"></div>
+                    <div id="transfer-success" class="alert alert-success rounded mr-2" role="alert"></div>
+                    <button type="button" class="btn btn-lg btn-primary btn-block text-uppercase" ng-click="transfer.doTransfer()">Transfer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <table id="transfer-table" class="table">
+            <thead>
+                <th scope="col">Time:</th>
+                <th scope="col">Account:</th>
+                <th scope="col">Amount:</th>
+                <th scope="col">Direction:</th>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>

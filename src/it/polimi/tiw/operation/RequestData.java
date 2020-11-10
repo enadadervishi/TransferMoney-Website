@@ -12,7 +12,12 @@ import java.io.IOException;
 public class RequestData {
 
     public static <T> T parseInto(Gson gson, HttpServletRequest request, Class<T> type) throws IOException, HandleException {
-        try {
+        // method
+    	// path
+    	// headers
+    	// parameters
+    	// body
+    	try {
             StringBuilder buffer = new StringBuilder();
             BufferedReader reader = request.getReader();
             String line;
@@ -20,6 +25,7 @@ public class RequestData {
                 buffer.append(line);
             }
 
+            // "{name: \"\hello", balance: 54}"
             String payload = buffer.toString();
             return gson.fromJson(payload, type);
         } catch (JsonParseException e) {

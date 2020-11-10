@@ -2,6 +2,7 @@ package it.polimi.tiw.operation;
 
 import com.google.gson.Gson;
 import it.polimi.tiw.auth.AuthManager;
+import it.polimi.tiw.operation.model.Response;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,9 +13,9 @@ import java.io.PrintWriter;
 public class JsonResult implements Result {
 
     private final Gson gson;
-    private final Object value;
+    private final Response value;
 
-    public JsonResult(Gson gson, Object value) {
+    public JsonResult(Gson gson, Response value) {
         this.gson = gson;
         this.value = value;
     }

@@ -2,8 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
+<!-- This java server page is the root element -->
 <html ng-app="myApp">
     <head>
+    <!-- It's replaced by the name of the home.jsp, login.jsp, ... for example -->
         <title>{{ pageTitle }}</title>
         <meta charset="ISO-8859-1">
 
@@ -19,34 +21,34 @@
         <link rel="stylesheet" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
+		<!-- request.getContextPath() returns the entire root path -->
         <link rel="stylesheet" href="<%=request.getContextPath()%>/css/app.css"/>
         <link rel="stylesheet" href="<%=request.getContextPath()%>/css/login.css"/>
     </head>
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-primary">
-            <a class="navbar-brand" style="cursor: pointer;" ng-click="showHome()">
+        	<!-- Link to app.module.js -->
+            <a class="navbar-brand" style="cursor: pointer;" ng-click="showHome()"> 
                 <img src="<%=request.getContextPath()%>/images/logo.gif" alt="logo" width="120" height="45">
             </a>
 
-            <c:if test="${not empty loggedUser}">
-                <form class="form-inline ml-auto" method="post" action="logout">
-                    <input type="submit" class="btn btn-outline-light" value="Logout">
-                </form>
-            </c:if>
+            <form class="form-inline ml-auto" method="post" action="logout">
+                <input type="submit" class="btn btn-outline-light" value="Logout">
+            </form>
         </nav>
         <div class="container-fluid body-content" ng-view>
+        
         </div>
 
 
         <script src="<%=request.getContextPath()%>/app/app.module.js"></script>
         <script type="text/javascript">
-            <c:if test="${not empty loggedUser}">
-                app.run(function($rootScope, $location) {
-                    $rootScope.loggedUser = ${loggedUser};
-                    console.log('logged in');
-                });
-            </c:if>
+             app.run(function($rootScope, $location) {
+                $rootScope.loggedUser = ${loggedUser};
+                console.log('logged in');
+             });
         </script>
+       
         <script src="<%=request.getContextPath()%>/app/components/home/home.ctrl.js"></script>
         <script src="<%=request.getContextPath()%>/app/components/account/account.ctrl.js"></script>
     </body>

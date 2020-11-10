@@ -5,11 +5,10 @@ import it.polimi.tiw.exceptions.ModelNotFoundException;
 import it.polimi.tiw.exceptions.PermissionException;
 import it.polimi.tiw.models.Account;
 import it.polimi.tiw.operation.ControllerOperations;
-import it.polimi.tiw.operation.EmptyResult;
-import it.polimi.tiw.operation.ErrorResult;
 import it.polimi.tiw.operation.JsonResult;
 import it.polimi.tiw.operation.OperationFlag;
 import it.polimi.tiw.operation.RequestPath;
+import it.polimi.tiw.operation.model.Response;
 import it.polimi.tiw.util.Closeables;
 
 import javax.servlet.ServletException;
@@ -21,7 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet(name = "AccountServlet", urlPatterns = {"/account/*"})
-public class AccountServlet extends HttpServlet {
+public class AccountServlet extends HttpServlet {//account | account/10
 
     private final Gson gson = new Gson();
     private ControllerOperations operations = null;
@@ -46,11 +45,11 @@ public class AccountServlet extends HttpServlet {
                 RequestPath requestPath = new RequestPath(request);
                 if (!requestPath.hasParams()) {
                    List<Account> accounts = database.getAccounts().selectByUserId(userId);
-                   return new JsonResult(gson, accounts);
+                   return new JsonResult(gson, Response.success(accounts));
                 }
 
                 if(requestPath.getPathCount() != 2) {
-                    return new ErrorResult(HttpServletResponse.SC_BAD_REQUEST, "expected two params: " + requestPath);
+                	return new JsonResult(gson, Response.error("expected two params: " + requestPath));
                 }
 
                 long accountId = requestPath.getLongParam(1);
@@ -58,7 +57,7 @@ public class AccountServlet extends HttpServlet {
                 Account account = database.getAccounts().selectById(accountId);
                 auth.checkAccountAccess(account);
 
-                return new JsonResult(gson, account);
+                return new JsonResult(gson, Response.success(account));
             } catch (ModelNotFoundException e) {
                 throw new PermissionException("no access to account");
             }
@@ -74,7 +73,7 @@ public class AccountServlet extends HttpServlet {
 
             RequestPath requestPath = new RequestPath(request);
             if (requestPath.hasParams()) {
-                return new ErrorResult(HttpServletResponse.SC_BAD_REQUEST, "wrong path");
+            	return new JsonResult(gson, Response.error("wrong path"));
             }
 
             Account account = new Account();
@@ -83,7 +82,7 @@ public class AccountServlet extends HttpServlet {
 
             account = database.getAccounts().add(account);
 
-            return new JsonResult(gson, account);
+            return new JsonResult(gson, Response.success(account));
         }, OperationFlag.REQUIRE_LOGGED_IN);
     }
 
@@ -95,7 +94,7 @@ public class AccountServlet extends HttpServlet {
             try {
                 RequestPath requestPath = new RequestPath(request);
                 if(requestPath.getPathCount() != 2) {
-                    return new ErrorResult(HttpServletResponse.SC_BAD_REQUEST, "expected two params");
+                    return new JsonResult(gson, Response.error("expected two params"));
                 }
 
                 long accountId = requestPath.getLongParam(1);
@@ -104,7 +103,7 @@ public class AccountServlet extends HttpServlet {
                 auth.checkAccountAccess(account);
                 database.getAccounts().delete(account);
 
-                return new EmptyResult();
+                return new JsonResult(gson, Response.success());
             } catch (ModelNotFoundException e) {
                 throw new PermissionException("no access to account");
             }

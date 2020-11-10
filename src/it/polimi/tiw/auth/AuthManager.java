@@ -7,6 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.OptionalLong;
 
+/**
+ * Authentication Manager
+ *
+ */
 public class AuthManager {
 
     private static final String CONNECTED_KEY = "loggedUserId";

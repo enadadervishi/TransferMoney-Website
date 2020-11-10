@@ -3,14 +3,13 @@ package it.polimi.tiw.controllers;
 import com.google.gson.Gson;
 import it.polimi.tiw.models.AddressBook;
 import it.polimi.tiw.operation.ControllerOperations;
-import it.polimi.tiw.operation.EmptyResult;
-import it.polimi.tiw.operation.ErrorResult;
 import it.polimi.tiw.operation.JsonResult;
 import it.polimi.tiw.operation.OperationFlag;
 import it.polimi.tiw.operation.RequestData;
 import it.polimi.tiw.operation.RequestParams;
 import it.polimi.tiw.operation.RequestPath;
 import it.polimi.tiw.operation.model.NewAddressBookData;
+import it.polimi.tiw.operation.model.Response;
 import it.polimi.tiw.operation.transfer.TermField;
 import it.polimi.tiw.util.Closeables;
 
@@ -44,8 +43,8 @@ public class AddressBookServlet extends HttpServlet {
             long userId = auth.getConnectedUserId().getAsLong();
 
             RequestPath requestPath = new RequestPath(request);
-            if(requestPath.hasParams()) {
-                return new ErrorResult(HttpServletResponse.SC_BAD_REQUEST, "wrong path");
+            if(requestPath.hasParams()) { // getPathCount > 1
+            	return new JsonResult(gson, Response.error("wrong path"));
             }
 
             RequestParams requestParams = new RequestParams(request);
@@ -55,11 +54,11 @@ public class AddressBookServlet extends HttpServlet {
                 TermField field = TermField.valueOf(fieldStr);
 
                 List<AddressBook> addressBooks = database.getAddressBook().selectByUserIdAndTerm(userId, field, term);
-                return new JsonResult(gson, addressBooks);
+                return new JsonResult(gson, Response.success(addressBooks));
             }
 
             List<AddressBook> addressBooks = database.getAddressBook().selectByUserId(userId);
-            return new JsonResult(gson, addressBooks);
+            return new JsonResult(gson, Response.success(addressBooks));
         }, OperationFlag.REQUIRE_LOGGED_IN);
     }
 
@@ -70,7 +69,7 @@ public class AddressBookServlet extends HttpServlet {
         operations.run(request, response, (database, auth)-> {
             RequestPath requestPath = new RequestPath(request);
             if (requestPath.hasParams()) {
-                return new ErrorResult(HttpServletResponse.SC_BAD_REQUEST, "wrong path");
+            	return new JsonResult(gson, Response.error("wrong path"));
             }
 
             NewAddressBookData data = RequestData.parseInto(gson, request, NewAddressBookData.class);
@@ -84,7 +83,7 @@ public class AddressBookServlet extends HttpServlet {
 
             database.getAddressBook().add(addressBook);
 
-            return new EmptyResult();
+            return new JsonResult(gson, Response.success());
         }, OperationFlag.REQUIRE_LOGGED_IN);
     }
 }

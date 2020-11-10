@@ -27,7 +27,15 @@ angular.module('app.home.ctrl', [])
         }).then(
             function(response) {
                 console.log(response);
-                var data = response.data;
+                var data = response.data.data;
+
+                // != | !==
+                if (response.data.success !== true) {
+                    console.log(response.data.data);
+                    return;
+                }
+
+                console.log(data);
 
                 var accountsParent = angular.element('#boards-container');
                 for (var index in data) {
@@ -60,7 +68,12 @@ angular.module('app.home.ctrl', [])
             function(response) {
                 console.log(response);
 
-                var data = response.data;
+                if (response.data.success !== true) {
+                    console.log(response.data.data);
+                    return;
+                }
+
+                var data = response.data.data;
                 var parent = angular.element('#boards-container');
                 var added = parent.append(accountHtml(data.id));
                 $compile(added)($scope);

@@ -11,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Table interface
+ */
 public abstract class ModelDao<T extends Model> {
 
     protected final Table table;

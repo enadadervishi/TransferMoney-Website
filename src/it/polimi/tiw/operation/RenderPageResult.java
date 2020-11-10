@@ -32,6 +32,7 @@ public class RenderPageResult implements Result {
         }
 
         OptionalLong optionalLong = auth.getConnectedUserId();
+        //If it's present a long value get it
         if (optionalLong.isPresent()) {
             request.setAttribute("loggedUser", optionalLong.getAsLong());
         }

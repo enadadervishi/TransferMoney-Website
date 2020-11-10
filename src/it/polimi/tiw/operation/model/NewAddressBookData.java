@@ -2,6 +2,8 @@ package it.polimi.tiw.operation.model;
 
 public class NewAddressBookData {
 
+	// {"recipientUserId": 2, "recipientAccountId": 5}
+	
     private final long recipientUserId;
     private final long recipientAccountId;
 

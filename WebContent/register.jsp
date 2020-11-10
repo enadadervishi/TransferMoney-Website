@@ -7,6 +7,8 @@
 
 <script type="text/javascript">
     function escapeRegex(string) {
+    	// password= testpassword      tst.passowrd
+    	// pattern = /^testpassword$/g    /^tst\.password$/g
         return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     }
 </script>

@@ -14,6 +14,24 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A utility for performing servlet operations.
+ * Using {@link #run(HttpServletRequest, HttpServletResponse, Operation, OperationFlag...) run}, servlets can simplify their
+ * code, by letting this class wrap the access to database and authentication resources, as well as handling errors and
+ * returning responses.
+ *
+ * <pre>
+ *  controllerOperations.run(request, response, (db, auth)-> {
+ *      // servlet code
+ *  });
+ * </pre>
+ * <p>
+ * PREFIX OPERATION
+ * 
+ * run (servlet code
+ * 
+ * SUFFIX OPERATION
+ */
 public class ControllerOperations implements AutoCloseable {
 
     private final Database database;
@@ -31,10 +49,10 @@ public class ControllerOperations implements AutoCloseable {
     }
 
     public void run(HttpServletRequest request, HttpServletResponse response,
-                    Operation operation, OperationFlag... flags)
+                    Operation operation, OperationFlag... flags) //Creates automatically flags __,__,...
             throws ServletException, IOException {
         try {
-            Set<OperationFlag> flagSet = new HashSet<>();
+            Set<OperationFlag> flagSet = new HashSet<>(); //no duplication
             Collections.addAll(flagSet, flags);
 
             AuthManager authManager = AuthManager.fromRequest(request);

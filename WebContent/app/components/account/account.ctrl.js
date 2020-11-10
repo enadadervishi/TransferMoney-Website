@@ -14,7 +14,7 @@ angular.module('app.account.ctrl', [])
         // load account
         $http({
             method: "GET",
-            url: `account/${$scope.accountId}`,
+            url: `account/${$scope.accountId}`, //account/10
             headers: {
 			   'Content-Type': "application/json;charset=utf-8"
 			},
@@ -23,7 +23,12 @@ angular.module('app.account.ctrl', [])
         }).then(
             function(response) {
                 console.log(response);
-                var data = response.data;
+                var data = response.data.data;
+
+                if (response.data.success !== true) {
+                    console.log(response.data.data);
+                    return;
+                }
 
                 $scope.accountBalance = data.balance;
             },
@@ -46,6 +51,13 @@ angular.module('app.account.ctrl', [])
                     data: ""
                 }).then(
                     function(response) {
+                        if (response.data.success !== true) {
+                            console.log(response.data.data);
+                            return;
+                        }
+
+                        response.data = response.data.data;
+                        // {data: []}
                         callback(response);
                     }
                 );
@@ -94,14 +106,20 @@ angular.module('app.account.ctrl', [])
                     }
                 }).then(
                     function(response) {
-                        for(var index in response.data) {
-                            var item = response.data[index];
+                        if (response.data.success !== true) {
+                            console.log(response.data.data);
+                            return;
+                        }
+
+                        var data = response.data.data;
+                        for(var index in data) {
+                            var item = data[index];
                             item.label = `User: ${item.recipientUserId}, Account: ${item.recipientAccountId}`;
                             item.value = '';
                         }
                         console.log("res");
                         console.log(response);
-                        callback(response.data);
+                        callback(data);
                     }
                 );
             },
@@ -128,6 +146,11 @@ angular.module('app.account.ctrl', [])
         }).then(
             function(response) {
                 console.log(response);
+                if (response.data.success !== true) {
+                    console.log(response.data.data);
+                    return;
+                }
+
                 $location.path('/');
             },
             function(response) {
@@ -150,7 +173,7 @@ angular.module('app.account.ctrl', [])
 
             var destinationUserId = parseInt($scope.transfer.destinationUserId);
             var destinationAccountId = parseInt($scope.transfer.destinationAccountId);
-            var amount = parseInt($scope.transfer.amount);
+            var amount = parseFloat($scope.transfer.amount);
 
             $http({
                 method: "POST",
@@ -168,7 +191,15 @@ angular.module('app.account.ctrl', [])
                 function(response) {
                     console.log(response);
 
-                    var data = response.data;
+                    var data = response.data.data;
+                    if (response.data.success !== true) {
+                        angular.element('#transfer-success').hide();
+                        angular.element('#transfer-error').show();
+                        angular.element('#transfer-error').html(response.data.data);
+                        return;
+                    }
+
+
                     $scope.accountBalance = data.newBalance;
 
                     $scope.transfer.destinationUserId = '';
@@ -191,7 +222,7 @@ angular.module('app.account.ctrl', [])
                     console.log(response);
                     angular.element('#transfer-success').hide();
                     angular.element('#transfer-error').show();
-                    angular.element('#transfer-error').html(response.data.message);
+                    angular.element('#transfer-error').html('Unknown Error');
                 }
             );
         }
@@ -213,12 +244,14 @@ angular.module('app.account.ctrl', [])
             }).then(
                 function(response) {
                     console.log(response);
+                    if (response.data.sucess !== true) {
+                        alert(response.data.data);
+                        return;
+                    }
 
                 },
                 function(response) {
                     console.log(response);
-                    // error
-                    alert(response.data.message);
                 }
             );
         }

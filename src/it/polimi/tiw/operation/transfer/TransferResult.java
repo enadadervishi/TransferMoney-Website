@@ -2,6 +2,8 @@ package it.polimi.tiw.operation.transfer;
 
 public class TransferResult {
 
+	// { "newBalance": 54,3, "isRecipientInAddressBook": false }
+	
     private final double newBalance;
     private final boolean isRecipientInAddressBook;
 

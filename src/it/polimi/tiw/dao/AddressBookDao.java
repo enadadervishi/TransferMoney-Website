@@ -26,7 +26,8 @@ public class AddressBookDao extends ModelDao<AddressBook> {
     }
 
     public List<AddressBook> selectByUserIdAndTerm(long userId, TermField field, String term) throws SQLException {
-        return executor.selectAll(String.format("userId=? AND %s LIKE '%s%%'", field.getTableName(), term),
+        return executor.selectAll(String.format("userId=? AND %s LIKE '%s%%'", 
+        		field.getTableName(), term),
                 "", new Object[]{userId},
                 AddressBook::new);
     }

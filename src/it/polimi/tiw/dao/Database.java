@@ -26,6 +26,7 @@ public class Database implements AutoCloseable {
         transfers = new TransferDao(connection);
         addressBook = new AddressBookDao(connection);
 
+        //it's checked once 
         if (initialized.compareAndSet(false, true)) {
             TableVersionDao versionDao = new TableVersionDao(connection);
             versionDao.createTable();
@@ -56,6 +57,7 @@ public class Database implements AutoCloseable {
         return addressBook;
     }
 
+    //Make sure it's an atomic operation
     public <E extends Exception> void doTransaction(ThrowingRunnable<? extends SQLException, E> runnable)
             throws SQLException, E {
         boolean done = false;

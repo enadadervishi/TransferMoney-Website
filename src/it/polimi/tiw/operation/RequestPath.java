@@ -8,9 +8,11 @@ import java.util.Arrays;
 
 public class RequestPath {
 
+	// http://localhost:8080/javascript-website/{path}
     private final String[] paths;
 
     public RequestPath(String path) {
+    	// account/1 -> paths {"account", "1"}
         this.paths = path == null ? new String[0] : path.split("/");
     }
 

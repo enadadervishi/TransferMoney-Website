@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Re-indirizzamento su un altro path=>pagina
+ */
 public class RedirectResult implements Result {
 
     private final String path;

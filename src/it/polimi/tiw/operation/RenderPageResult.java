@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.OptionalLong;
 
+/**
+ * Renderizzazione su un altro path (jsp)
+ */
 public class RenderPageResult implements Result {
 
     private final String path;
@@ -32,11 +35,12 @@ public class RenderPageResult implements Result {
         }
 
         OptionalLong optionalLong = auth.getConnectedUserId();
-        //If it's present a long value get it
+        //Optional=> se è presente un long value 
         if (optionalLong.isPresent()) {
             request.setAttribute("loggedUser", optionalLong.getAsLong());
         }
-
+       
+        // inoltro
         request.getRequestDispatcher(path).forward(request, response);
     }
 }

@@ -49,7 +49,7 @@ public class TransferOperation {
             });
         } catch (ModelNotFoundException e) {
             throw new OperationException("dest account does not exist");
-        } catch (ModelDuplicateException e) { // shouldn't occur
+        } catch (ModelDuplicateException e) { 
             throw new AssertionError(e);
         }
     }

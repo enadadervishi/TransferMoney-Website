@@ -5,7 +5,7 @@ var app = angular.module("myApp",   [
                                     ]);
 
 app.config(function ($routeProvider) {
-    $routeProvider
+    $routeProvider //url routing
         .when("/", {
             templateUrl: "app/components/home/home.html"
         })
@@ -19,8 +19,9 @@ app.run(function($rootScope, $location, $http, $window) {
     $rootScope.showHome = function() {
         $location.path("/");
     };
-    // register listener to watch route changes
+    // register listener to watch route changes (risorsa StackOverflow)
+    //"listener" -> cambi di pagina in angular
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
-        console.log(next.templateUrl);
+        console.log(next.templateUrl); //Stampa il "path" della nuova pagina
     });
 });

@@ -1,4 +1,3 @@
-
 angular.module('app.account.ctrl', [])
     .controller('account.ctrl', ['$scope', '$location', '$http', '$compile', '$rootScope', '$routeParams',
     function($scope, $location, $http, $compile, $rootScope, $routeParams) {
@@ -16,8 +15,8 @@ angular.module('app.account.ctrl', [])
             method: "GET",
             url: `account/${$scope.accountId}`, //account/10
             headers: {
-			   'Content-Type': "application/json;charset=utf-8"
-			},
+               'Content-Type': "application/json;charset=utf-8"
+            },
             responseType: "json",
             data: ""
         }).then(
@@ -40,7 +39,7 @@ angular.module('app.account.ctrl', [])
 
         // load transfers table
         $scope.transfersTable = angular.element('#transfer-table').DataTable({
-            "ajax": function(data, callback, settings) {
+            "ajax": function(data, callback, settings) { 
                 $http({
                     method: "GET",
                     url: `transfer/${$scope.accountId}`,
@@ -155,7 +154,6 @@ angular.module('app.account.ctrl', [])
             },
             function(response) {
                 console.log(response);
-                // error
             }
         );
     };
@@ -244,7 +242,7 @@ angular.module('app.account.ctrl', [])
             }).then(
                 function(response) {
                     console.log(response);
-                    if (response.data.sucess !== true) {
+                    if (response.data.success !== true) {
                         alert(response.data.data);
                         return;
                     }

@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+/**
+ * Prelevare un blocco di dati e "parsarlo"
+ */
 public class RequestData {
 
     public static <T> T parseInto(Gson gson, HttpServletRequest request, Class<T> type) throws IOException, HandleException {

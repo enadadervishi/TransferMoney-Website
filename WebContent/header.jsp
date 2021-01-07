@@ -24,7 +24,7 @@
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-primary">
             <a class="navbar-brand" style="cursor: pointer;" href="home">
-                <img src="<%=request.getContextPath()%>/images/logo.gif" alt="logo" width="120" height="45">
+                <img src="<%=request.getContextPath()%>/images/logo.gif" alt="logo" width="110" height="65">
             </a>
 
             <c:if test="${not empty loggedUser}">

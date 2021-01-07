@@ -8,8 +8,7 @@ import javax.servlet.http.HttpSession;
 import java.util.OptionalLong;
 
 /**
- * Authentication Manager
- *
+ * Autenticazione
  */
 public class AuthManager {
 
@@ -41,7 +40,7 @@ public class AuthManager {
     public void checkAccountAccess(Account account) throws PermissionException {
         OptionalLong optionalLong = getConnectedUserId();
         if (!optionalLong.isPresent() || account.getUserId() != optionalLong.getAsLong()) {
-            throw new PermissionException("No access to account");
+            throw new PermissionException("No access to account"); //vedi modifica manuale url
         }
     }
 }

@@ -22,6 +22,10 @@ public class User implements Model {
 
     @Override
     public String[] getFieldDescriptors() {
+    	//type: INTEGER
+    	//flags: 
+    	//AUTO_INCREMENT automaticamente da 1 a 2,3,...
+    	//PRIMARY KEY se si cancella "riga 2" nessun'altro potrà essere "riga 2"
         return new String[] {"id INTEGER AUTO_INCREMENT PRIMARY KEY", "username VARCHAR(255) NOT NULL UNIQUE",
                 "password VARCHAR(255) NOT NULL", "email VARCHAR(255) NOT NULL"};
     }

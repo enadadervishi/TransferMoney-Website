@@ -133,6 +133,8 @@ public class ModelQueryExecutor {
                                                Object[] params,
                                                ThrowingFunction<ResultSet, T, SQLException> factory)
             throws SQLException {
+    	// SELECT * FROM tableName WHERE username=? AND password=? 
+     	// SELECT * FROM tableName WHERE username=? OR password=? ORDER BY timestamp DESC
         String query = new StringBuilder()
                 .append("SELECT * FROM ").append(tableName)
                 .append(" WHERE ").append(where).append(' ')
@@ -146,6 +148,7 @@ public class ModelQueryExecutor {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
+                	//conversione da ResultSet a una delle classi Model
                     T model = factory.apply(resultSet);
                     results.add(model);
                 }
@@ -159,6 +162,7 @@ public class ModelQueryExecutor {
                                                      Object[] params,
                                                      ThrowingFunction<ResultSet, T, SQLException> factory)
             throws SQLException {
+    	// SELECT * FROM tableName WHERE username=?, password=?
         List<T> list = selectAll(where, additionalSettings, params, factory);
         if (list.isEmpty()) {
             return Optional.empty();

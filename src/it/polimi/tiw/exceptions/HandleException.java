@@ -1,5 +1,8 @@
 package it.polimi.tiw.exceptions;
 
+/**
+ * Errore nelle servlet: viene mandato un mesaggio allo user di "not found"
+ */
 public class HandleException extends Exception {
 
     private final int errorCode;

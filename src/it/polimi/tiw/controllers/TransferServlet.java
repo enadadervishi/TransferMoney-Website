@@ -45,6 +45,8 @@ public class TransferServlet extends HttpServlet {
             throws ServletException, IOException {
         operations.run(request, response, (database, auth)-> {
             RequestPath requestPath = new RequestPath(request);
+            
+            
             if (requestPath.getPathCount() != 2) {
             	return new JsonResult(gson, Response.error("expected 2 params: " + requestPath));
             }
@@ -67,6 +69,7 @@ public class TransferServlet extends HttpServlet {
         operations.run(request, response, (database, auth)-> {
             try {
                 RequestPath requestPath = new RequestPath(request);
+                
                 if (requestPath.getPathCount() != 2) {
                 	return new JsonResult(gson, Response.error("expected 2 params: " + requestPath));
                 }

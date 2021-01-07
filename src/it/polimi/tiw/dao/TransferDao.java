@@ -14,6 +14,8 @@ public class TransferDao extends ModelDao<Transfer> {
     }
 
     public List<Transfer> selectByAccountIdDescending(long accountId) throws SQLException {
+    	// WHERE sourceAccountId = accountId OR destinationAccountId = accountId
+    	//dipende da chi è la source/destination
         return executor.selectAll("sourceAccountId=? OR destinationAccountId=?",
                 "ORDER BY timestamp DESC",
                 new Object[] {accountId, accountId}, Transfer::new);

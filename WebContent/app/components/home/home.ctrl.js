@@ -15,7 +15,7 @@ angular.module('app.home.ctrl', [])
     $rootScope.pageTitle = "Home";
 
     angular.element(document).ready(function() {
-        // load accounts
+        //load accounts
         $http({
             method: "GET",
             url: 'account',
@@ -29,7 +29,6 @@ angular.module('app.home.ctrl', [])
                 console.log(response);
                 var data = response.data.data;
 
-                // != | !==
                 if (response.data.success !== true) {
                     console.log(response.data.data);
                     return;
@@ -46,7 +45,6 @@ angular.module('app.home.ctrl', [])
             },
             function(response) {
                 console.log(response);
-                // error
             }
         );
     });
@@ -80,7 +78,6 @@ angular.module('app.home.ctrl', [])
             },
             function(response) {
                 console.log(response);
-                // error
             }
         );
     };

@@ -5,6 +5,10 @@ import org.apache.commons.text.StringEscapeUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Prelevare parametri (modalità pure html)
+ *
+ */
 public class RequestParams {
 
     private final HttpServletRequest request;

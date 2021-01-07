@@ -6,6 +6,10 @@ import org.apache.commons.text.StringEscapeUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
+/**
+ * Prelevare info dall'url
+ *
+ */
 public class RequestPath {
 
 	// http://localhost:8080/javascript-website/{path}

@@ -43,9 +43,11 @@ public class AddressBookServlet extends HttpServlet {
             long userId = auth.getConnectedUserId().getAsLong();
 
             RequestPath requestPath = new RequestPath(request);
+            
+            /*
             if(requestPath.hasParams()) { // getPathCount > 1
             	return new JsonResult(gson, Response.error("wrong path"));
-            }
+            }*/
 
             RequestParams requestParams = new RequestParams(request);
             if (requestParams.count() == 2) {
@@ -68,9 +70,11 @@ public class AddressBookServlet extends HttpServlet {
             throws ServletException, IOException {
         operations.run(request, response, (database, auth)-> {
             RequestPath requestPath = new RequestPath(request);
+            
+            /*
             if (requestPath.hasParams()) {
             	return new JsonResult(gson, Response.error("wrong path"));
-            }
+            }*/
 
             NewAddressBookData data = RequestData.parseInto(gson, request, NewAddressBookData.class);
 

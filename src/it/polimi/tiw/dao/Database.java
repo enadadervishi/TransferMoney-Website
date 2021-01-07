@@ -23,7 +23,7 @@ public class Database implements AutoCloseable {
         transfers = new TransferDao(connection);
         addressBook = new AddressBookDao(connection);
 
-        //it's checked once 
+        //Solo un solo check
         if (initialized.compareAndSet(false, true)) {
         	users.createTable();
         	accounts.createTable();
@@ -61,7 +61,7 @@ public class Database implements AutoCloseable {
             if (!done) {
                 this.connection.rollback();
             }
-
+            
             this.connection.setAutoCommit(true);
         }
     }

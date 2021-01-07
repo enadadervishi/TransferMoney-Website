@@ -54,7 +54,7 @@ public class LoginServlet extends HttpServlet {
                 return new RedirectResult("home");
             } catch (ModelNotFoundException e) {
                 Map<String, Object> attributes = new HashMap<>();
-                attributes.put("loginError", "User not found for given credentials");
+                attributes.put("loginError", "User not found for given credentials"); //jsp $loginError
 
                 return new RenderPageResult("/login.jsp", attributes);
             } catch (OperationException e) {

@@ -15,22 +15,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A utility for performing servlet operations.
- * Using {@link #run(HttpServletRequest, HttpServletResponse, Operation, OperationFlag...) run}, servlets can simplify their
- * code, by letting this class wrap the access to database and authentication resources, as well as handling errors and
- * returning responses.
- *
- * <pre>
- *  controllerOperations.run(request, response, (db, auth)-> {
- *      // servlet code
- *  });
- * </pre>
- * <p>
- * PREFIX OPERATION
- * 
- * run (servlet code
- * 
- * SUFFIX OPERATION
+ * Operazioni base dei servlet
+ * "wrapper". Accesso database e auth, con eventuali errori
  */
 public class ControllerOperations implements AutoCloseable {
 
@@ -48,6 +34,8 @@ public class ControllerOperations implements AutoCloseable {
         }
     }
 
+    //run method = wrapper
+    //"Attivazione" database e autenticazione (+ eventuali errori); esecuzione della richiesta --> risposta
     public void run(HttpServletRequest request, HttpServletResponse response,
                     Operation operation, OperationFlag... flags) //Creates automatically flags __,__,...
             throws ServletException, IOException {

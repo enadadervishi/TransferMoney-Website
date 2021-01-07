@@ -5,7 +5,7 @@
 <!-- This java server page is the root element -->
 <html ng-app="myApp">
     <head>
-    <!-- It's replaced by the name of the home.jsp, login.jsp, ... for example -->
+    <!-- title of home.jsp, login.jsp ecc ecc -->
         <title>{{ pageTitle }}</title>
         <meta charset="ISO-8859-1">
 
@@ -21,7 +21,7 @@
         <link rel="stylesheet" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
-		<!-- request.getContextPath() returns the entire root path -->
+		<!-- Root path -->
         <link rel="stylesheet" href="<%=request.getContextPath()%>/css/app.css"/>
         <link rel="stylesheet" href="<%=request.getContextPath()%>/css/login.css"/>
     </head>

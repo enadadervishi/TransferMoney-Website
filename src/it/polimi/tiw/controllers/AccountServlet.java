@@ -92,7 +92,9 @@ public class AccountServlet extends HttpServlet {//account | account/10
             throws ServletException, IOException {
         operations.run(request, response, (database, auth)-> {
             try {
+            	
                 RequestPath requestPath = new RequestPath(request);
+                
                 if(requestPath.getPathCount() != 2) {
                     return new JsonResult(gson, Response.error("expected two params"));
                 }

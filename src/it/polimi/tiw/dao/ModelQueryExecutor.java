@@ -76,7 +76,6 @@ public class ModelQueryExecutor {
 
         String query = stringBuilder.toString();
         
-        //Return generated key = flag from JDBC to fetch the keys
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             putParameterList(statement, 1, fieldValues);
 

@@ -35,7 +35,6 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
     	/**
     	 * Adds all the accounts which belong to the user
-    	 * OperationFlag => lambda works if someone is logged in
     	 */
         operations.run(request, response, (database, auth)-> {
             long userId = auth.getConnectedUserId().getAsLong();

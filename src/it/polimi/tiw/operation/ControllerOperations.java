@@ -32,9 +32,10 @@ public class ControllerOperations implements AutoCloseable {
     }
 
     public void run(HttpServletRequest request, HttpServletResponse response,
-                    Operation operation, OperationFlag... flags)
+                    Operation operation, OperationFlag... flags)//OF.___,OF.___,...
             throws ServletException, IOException {
         try {
+        	
             Set<OperationFlag> flagSet = new HashSet<>();
             Collections.addAll(flagSet, flags);
 

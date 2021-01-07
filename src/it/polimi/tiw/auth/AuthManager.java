@@ -36,7 +36,7 @@ public class AuthManager {
     }
 
     /**
-     * E.g. if it's modified manually the url "?id=2" 
+     * If modified manually the url "?id=2" 
      */
     public void checkAccountAccess(Account account) throws PermissionException {
         OptionalLong optionalLong = getConnectedUserId();

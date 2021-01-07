@@ -36,9 +36,6 @@ public class DbConnection {
         }
     }
 
-    /**
-     * It's opened a new connection due to db.properties which refers to a specific db 
-     */
     private static void initializeDataSource() throws IOException, ClassNotFoundException {
         Properties properties = new Properties();
         try (InputStream inputStream = DbConnection.class.getClassLoader().getResourceAsStream("db.properties")) {
@@ -47,6 +44,7 @@ public class DbConnection {
 
         Class.forName(properties.getProperty("DB_DRIVER_CLASS"));
 
+        //BasicDataSource : pool of connections
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(properties.getProperty("DB_DRIVER_CLASS"));
         dataSource.setUrl(properties.getProperty("DB_URL"));

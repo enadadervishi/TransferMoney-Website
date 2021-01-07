@@ -41,9 +41,9 @@ public class Database implements AutoCloseable {
         return transfers;
     }
 
-    /**
+    /** 
      * The transaction is done after db autoCommit is stopped
-     * If something goes wrong then rollback 
+     * If something goes wrong then rollback
      */
     public <E extends Exception> void doTransaction(ThrowingRunnable<? extends SQLException, E> runnable)
             throws SQLException, E {

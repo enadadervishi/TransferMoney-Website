@@ -11,6 +11,9 @@ import it.polimi.tiw.models.Model;
 import it.polimi.tiw.models.Table;
 import it.polimi.tiw.util.ThrowingFunction;
 
+/**
+ * It's the model of every Data Access Object 
+ */
 public abstract class ModelDao<T extends Model> {
 
     protected final Table table;

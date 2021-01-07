@@ -35,6 +35,7 @@ public class NewAccountServlet extends HttpServlet {
             Account account = new Account();
             //My choice
             account.setBalance(50.0);
+            //I connect userId to a specific account
             account.setUserId(userId);
 
             database.getAccounts().add(account);
